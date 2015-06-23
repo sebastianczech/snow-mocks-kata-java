@@ -1,7 +1,7 @@
 Snow Mocks
 ==========
 
-Zaimplementuj klasę SnowRescueService - to jest Twój SUT. Wszystkie pozostałe klasy potraktuj jako zależności.
+Zaimplementuj klasę SnowRescueService - to jest twój System Under Test. Wszystkie pozostałe klasy potraktuj jako zależności.
 
 1. Wyślij piaskarkę (sander) tylko jeśli temperatura będzie poniżej 0 st C
 
