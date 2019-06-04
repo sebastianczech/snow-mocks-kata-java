@@ -1,6 +1,8 @@
 Snow Mocks
 ==========
 
+## Zadanie
+
 Zaimplementuj klasę SnowRescueService - to jest twój System Under Test. Wszystkie pozostałe klasy potraktuj jako zależności.
 
 1. Wyślij piaskarkę (sander) tylko jeśli temperatura będzie poniżej 0 st C
@@ -13,7 +15,7 @@ Zaimplementuj klasę SnowRescueService - to jest twój System Under Test. Wszyst
 
 5. Jeśli temperatura będzie poniżej -10 i opady śniegu przekroczą 10 mm, wyślij trzy pługi, piaskarkę i powiadom prasę. 
 
-
+## Task
 
 Your task is to implement SnowRescueService class - this is your System Under Test. Treat all other classes as dependencies.
 
