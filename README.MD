@@ -28,3 +28,9 @@ Your task is to implement SnowRescueService class - this is your System Under Te
 4. Send two snowplows if snowfall exceed 5 mm
 
 5. If temperature drops below -10 and snowfall exceed 10 mm, send three snowplows, a sander and notify press. 
+
+
+# Good to know
+
+*Mockito documentation:*
+https://javadoc.io/doc/org.mockito/mockito-core/latest/org/mockito/Mockito.html
