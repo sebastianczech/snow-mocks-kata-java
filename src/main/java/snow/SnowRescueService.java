@@ -9,6 +9,7 @@ public class SnowRescueService {
 
 	private static final int TEMPERATURE_WHEN_SEND_SANDER = 0;
 	private static final int SNOWFALL_WHEN_SEND_SNOWPLOW = 3;
+	private static final int SNOWFALL_WHEN_SEND_2_SNOWPLOWS = 5;
 
 	private final WeatherForecastService weatherForecastService;
 	private final MunicipalServices municipalServices;
@@ -22,16 +23,25 @@ public class SnowRescueService {
 
 	void checkForecastAndRescue() {
 		if (weatherForecastService.getAverageTemperatureInCelsius() < TEMPERATURE_WHEN_SEND_SANDER) {
-			municipalServices.sendSander();
+			sendSander();
 		}
 		if (weatherForecastService.getSnowFallHeightInMM() > SNOWFALL_WHEN_SEND_SNOWPLOW) {
-			try {
-				municipalServices.sendSnowplow();
-			}
-			catch (SnowplowMalfunctioningException snowplowException) {
-				municipalServices.sendSnowplow();
-			}
+			sendSnowplow();
+		}
+		if (weatherForecastService.getSnowFallHeightInMM() > SNOWFALL_WHEN_SEND_2_SNOWPLOWS) {
+			sendSnowplow();
+		}
+	}
 
+	private void sendSander() {
+		municipalServices.sendSander();
+	}
+
+	private void sendSnowplow() {
+		try {
+			municipalServices.sendSnowplow();
+		} catch (SnowplowMalfunctioningException snowplowException) {
+			municipalServices.sendSnowplow();
 		}
 	}
 

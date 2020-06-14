@@ -70,4 +70,17 @@ class SnowRescueServiceTest {
         Mockito.verify(municipalServices, times(2)).sendSnowplow();
     }
 
+    @Test
+    void send_2_snowplows_when_snowfall_more_than_5mm() {
+        // given
+        Mockito.when(weatherForecastService.getSnowFallHeightInMM()).thenReturn(6);
+        SnowRescueService snowRescueService = new SnowRescueService(weatherForecastService, municipalServices, null);
+
+        // when
+        snowRescueService.checkForecastAndRescue();
+
+        // then
+        Mockito.verify(municipalServices, times(2)).sendSnowplow();
+    }
+
 }
