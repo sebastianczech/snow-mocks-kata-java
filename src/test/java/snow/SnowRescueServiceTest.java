@@ -6,9 +6,15 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.stubbing.OngoingStubbing;
 import snow.dependencies.MunicipalServices;
 import snow.dependencies.PressService;
+import snow.dependencies.SnowplowMalfunctioningException;
 import snow.dependencies.WeatherForecastService;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.times;
 
 @ExtendWith(MockitoExtension.class)
 class SnowRescueServiceTest {
@@ -48,6 +54,20 @@ class SnowRescueServiceTest {
 
         // then
         Mockito.verify(municipalServices).sendSnowplow();
+    }
+
+    @Test
+    void send_snowplow_when_previous_snowplow_is_broken() {
+        // given
+        Mockito.when(weatherForecastService.getSnowFallHeightInMM()).thenReturn(4);
+        Mockito.doThrow(new SnowplowMalfunctioningException()).when(municipalServices).sendSnowplow();
+        SnowRescueService snowRescueService = new SnowRescueService(weatherForecastService, municipalServices, null);
+
+        // when, //then
+        assertThatThrownBy(snowRescueService::checkForecastAndRescue).isInstanceOf(SnowplowMalfunctioningException.class);
+
+        // then
+        Mockito.verify(municipalServices, times(2)).sendSnowplow();
     }
 
 }
