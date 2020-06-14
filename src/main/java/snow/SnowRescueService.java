@@ -6,6 +6,9 @@ import snow.dependencies.WeatherForecastService;
 
 public class SnowRescueService {
 
+	private static final int TEMPERATURE_WHEN_SEND_SANDER = 0;
+	private static final int SNOWFALL_WHEN_SEND_SNOWPLOW = 3;
+
 	private final WeatherForecastService weatherForecastService;
 	private final MunicipalServices municipalServices;
 	private final PressService pressService;
@@ -17,8 +20,11 @@ public class SnowRescueService {
 	}
 
 	void checkForecastAndRescue() {
-		if (weatherForecastService.getAverageTemperatureInCelsius() < 0) {
+		if (weatherForecastService.getAverageTemperatureInCelsius() < TEMPERATURE_WHEN_SEND_SANDER) {
 			municipalServices.sendSander();
+		}
+		if (weatherForecastService.getSnowFallHeightInMM() > SNOWFALL_WHEN_SEND_SNOWPLOW) {
+			municipalServices.sendSnowplow();
 		}
 	}
 
