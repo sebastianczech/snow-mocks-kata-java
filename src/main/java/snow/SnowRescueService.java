@@ -9,7 +9,6 @@ class SnowRescueService {
 
 	private static final int TEMPERATURE_WHEN_SEND_SANDER = 0;
 	private static final int TEMPERATURE_WHEN_PRESS_ALERT = -10;
-	private static final int SNOWFALL_WHEN_SEND_1_SNOWPLOW = 3;
 	private static final int SNOWFALL_WHEN_SEND_2_SNOWPLOWS = 5;
 	private static final int SNOWFALL_WHEN_SEND_3_SNOWPLOWS = 10;
 
