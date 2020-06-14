@@ -1,18 +1,15 @@
 package snow;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.stubbing.OngoingStubbing;
 import snow.dependencies.MunicipalServices;
 import snow.dependencies.PressService;
 import snow.dependencies.SnowplowMalfunctioningException;
 import snow.dependencies.WeatherForecastService;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.times;
 
@@ -81,6 +78,22 @@ class SnowRescueServiceTest {
 
         // then
         Mockito.verify(municipalServices, times(2)).sendSnowplow();
+    }
+
+    @Test
+    void send_3_snowplows_1_sander_call_to_press_when_snowfall_more_than_10mm_and_temperature_below_10() {
+        // given
+        Mockito.when(weatherForecastService.getSnowFallHeightInMM()).thenReturn(11);
+        Mockito.when(weatherForecastService.getAverageTemperatureInCelsius()).thenReturn(-11);
+        SnowRescueService snowRescueService = new SnowRescueService(weatherForecastService, municipalServices, pressService);
+
+        // when
+        snowRescueService.checkForecastAndRescue();
+
+        // then
+        Mockito.verify(municipalServices, times(3)).sendSnowplow();
+        Mockito.verify(municipalServices).sendSander();
+        Mockito.verify(pressService).sendWeatherAlert();
     }
 
 }
