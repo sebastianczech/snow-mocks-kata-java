@@ -1,5 +1,6 @@
 package snow;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -24,6 +25,12 @@ class SnowRescueServiceTest {
 
     @Mock
     PressService pressService;
+    private SnowRescueService snowRescueService;
+
+    @BeforeEach
+    void setUp() {
+        snowRescueService = new SnowRescueService(weatherForecastService, municipalServices, pressService);
+    }
 
     @Test
     void send_sander_when_temperature_below_zero() {
@@ -31,7 +38,6 @@ class SnowRescueServiceTest {
 //        WeatherForecastService weatherForecastService = Mockito.mock(WeatherForecastService.class);
 //        MunicipalServices municipalServices = Mockito.mock(MunicipalServices.class);
         Mockito.when(weatherForecastService.getAverageTemperatureInCelsius()).thenReturn(-1);
-        SnowRescueService snowRescueService = new SnowRescueService(weatherForecastService, municipalServices, null);
 
         // when
         snowRescueService.checkForecastAndRescue();
@@ -44,7 +50,6 @@ class SnowRescueServiceTest {
     void send_snowplow_when_snowfall_more_than_3mm() {
         // given
         Mockito.when(weatherForecastService.getSnowFallHeightInMM()).thenReturn(4);
-        SnowRescueService snowRescueService = new SnowRescueService(weatherForecastService, municipalServices, null);
 
         // when
         snowRescueService.checkForecastAndRescue();
@@ -57,8 +62,7 @@ class SnowRescueServiceTest {
     void send_snowplow_when_previous_snowplow_is_broken() {
         // given
         Mockito.when(weatherForecastService.getSnowFallHeightInMM()).thenReturn(4);
-        Mockito.doThrow(new SnowplowMalfunctioningException()).when(municipalServices).sendSnowplow();
-        SnowRescueService snowRescueService = new SnowRescueService(weatherForecastService, municipalServices, null);
+        Mockito.doThrow(SnowplowMalfunctioningException.class).when(municipalServices).sendSnowplow();
 
         // when, //then
         assertThatThrownBy(snowRescueService::checkForecastAndRescue).isInstanceOf(SnowplowMalfunctioningException.class);
@@ -71,7 +75,6 @@ class SnowRescueServiceTest {
     void send_2_snowplows_when_snowfall_more_than_5mm() {
         // given
         Mockito.when(weatherForecastService.getSnowFallHeightInMM()).thenReturn(6);
-        SnowRescueService snowRescueService = new SnowRescueService(weatherForecastService, municipalServices, null);
 
         // when
         snowRescueService.checkForecastAndRescue();
@@ -85,7 +88,6 @@ class SnowRescueServiceTest {
         // given
         Mockito.when(weatherForecastService.getSnowFallHeightInMM()).thenReturn(11);
         Mockito.when(weatherForecastService.getAverageTemperatureInCelsius()).thenReturn(-11);
-        SnowRescueService snowRescueService = new SnowRescueService(weatherForecastService, municipalServices, pressService);
 
         // when
         snowRescueService.checkForecastAndRescue();
